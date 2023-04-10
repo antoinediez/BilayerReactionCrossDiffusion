@@ -11,7 +11,7 @@ using NLsolve
 println("Initialize everything...")
 
 #-------- Add the scripts------------------------------------------------------#
-include("scr/reaction_taxis_growth.jl")
+include("reaction_taxis_growth.jl")
 include("scr/plot_save.jl")
 include("scr/ODE_func.jl")
 #------------------------------------------------------------------------------#
@@ -20,10 +20,10 @@ simu_name = init_directory(simu_name="simu")
 
 #-------- Discretization parameters -------------------------------------------#
 dim = 2    # Dimension of the bulk (1 or 2)
-Nx = 256    # Number of cells in the x-direction (bulk and surface)
-Ny = 256    # Number of cells in the y-direction (bulk)
-Lx = 100.0     # Length of the domain in the x-direction (bulk and surface)
-Ly = 100.0   # Length of the domain in the y-direction (bulk)
+Nx = 128    # Number of cells in the x-direction (bulk and surface)
+Ny = 128    # Number of cells in the y-direction (bulk)
+Lx = 200.0     # Length of the domain in the x-direction (bulk and surface)
+Ly = 200.0   # Length of the domain in the y-direction (bulk)
 dx = Lx/Nx    # Cell length in the x-direction
 dy = Ly/Ny    # Cell length in the y-direction
 
@@ -40,14 +40,14 @@ dy = Ly/Ny    # Cell length in the y-direction
 αS = 1.0
 βS = 1.0
 αB = 1.0
-βB = 1.0
+βB = 180.0
 
 #------------------------------------------------------------------------------#
 
 
 #-------- Time parameters -----------------------------------------------------#
 
-T = 500.0 # Simulation time 
+T = 2000.0 # Simulation time 
 
 #------------------------------------------------------------------------------#
 
@@ -56,19 +56,20 @@ T = 500.0 # Simulation time
 
 #=================== SURFACE ==========================#
 
-reac_S_name = "Schnakenberg"
-a_S = 0.2305 
-b_S = 0.7695
-sc_S = 1.0
-param_reac_S = Dict(
-    :a => a_S,
-    :b => b_S,
-    :sc => sc_S
-)
+#********************************#
+# reac_S_name = "Schnakenberg"
+# a_S = 0.2305 
+# b_S = 0.7695
+# sc_S = 1.0
+# param_reac_S = Dict(
+#     :a => a_S,
+#     :b => b_S,
+#     :sc => sc_S
+# )
 
 # Diffusion parameters
-DuS = 1.0
-DvS = 20.0
+# DuS = 1.0
+# DvS = 20.0
 
 ## Critical diffusion
 # fuS = param_reac_S[:sc]*(-1 + 2*uS_eq*vS_eq)
@@ -80,104 +81,110 @@ DvS = 20.0
 ## Equilibria
 # uS_eq = a_S + b_S 
 # vS_eq = b_S/(a_S + b_S)^2
+#********************************#
 
 
-
-# reac_S_name = "Linear Activator-Inhibitor"
-# synth_uS = 1.0
-# a1S = 2.0
-# bS = 2.0
-# a2S = 1.0
-# synth_vS = 0.25
-# c1S = 1.0
-# dS = 1.0
-# c2S = 2.0
-# param_reac_S = Dict(
-#     :act_synth => synth_uS,
-#     :act_autocat => a1S,
-#     :inhib_act =>  bS,
-#     :max_act_synth => 1000.0,
-#     :act_deg => a2S,
-#     :inhib_synth => synth_vS,
-#     :inhib_autocat => c1S,
-#     :inhib_act_crea => dS,
-#     :max_inhib_synth => 1000.0,
-#     :inhib_deg => c2S,
-#     :sc => 1.0
-# )
+#********************************#
+reac_S_name = "Linear Activator-Inhibitor"
+synth_uS = 1.0
+a1S = 2.0
+bS = 2.0
+a2S = 1.0
+synth_vS = 0.25
+c1S = 1.0
+dS = 1.0
+c2S = 2.0
+param_reac_S = Dict(
+    :act_synth => synth_uS,
+    :act_autocat => a1S,
+    :inhib_act =>  bS,
+    :max_act_synth => 10.0,
+    :act_deg => a2S,
+    :inhib_synth => synth_vS,
+    :inhib_autocat => c1S,
+    :inhib_act_crea => dS,
+    :max_inhib_synth => 10.0,
+    :inhib_deg => c2S,
+    :sc => 1.0
+)
 
 
 # Equilibria 
-# aS = a1S - a2S
-# cS = c2S - c1S
-# uS_eq = 1/(aS*cS - bS*dS) * (bS*synth_vS - synth_uS*cS)
-# vS_eq = 1/(aS*cS - bS*dS) * (aS*synth_vS - synth_uS*dS)
+aS = a1S - a2S
+cS = c2S - c1S
+uS_eq = 1/(aS*cS - bS*dS) * (bS*synth_vS - synth_uS*cS)
+vS_eq = 1/(aS*cS - bS*dS) * (aS*synth_vS - synth_uS*dS)
 
 ## Diffusion parameters
 # DvS_cr = ((sqrt(bS*dS - aS*cS) + sqrt(bS*dS))^2 / aS^2)
-# DvS = 2.0 * DvS_cr
-# DuS = 1.0
+DvS = 2.91
+DuS = 1.0
+#********************************#
 
 #======================================================#
 
 
 #===================== BULK ===========================#
 
-reac_B_name = "Schnakenberg"
-a_B = 0.2305 
-b_B = 0.7695
-sc_B = 1.0
+#********************************#
+# reac_B_name = "Schnakenberg"
+# a_B = 0.2305 
+# b_B = 0.7695
+# sc_B = 1.0
 
-param_reac_B = Dict(
-    :a => a_B,
-    :b => b_B,
-    :sc => sc_B,
-    :c_eq => 1.0
-)
+# param_reac_B = Dict(
+#     :a => a_B,
+#     :b => b_B,
+#     :sc => sc_B,
+#     :c_eq => 1.0
+# )
 
 ## Equilibria 
 # uB_eq = a_B + b_B 
 # vB_eq = b_B/(a_B + b_B)^2
 
 ## Diffusion parameters
-DuB = 1.0
-DvB = 15.0
-Dc = 1.0
+# DuB = 1.0
+# DvB = 15.0
+# Dc = 1.0
 # fuB = param_reac_B[:sc]*(-1 + 2*uB_eq*vB_eq)
 # fvB = param_reac_B[:sc]*uB_eq^2
 # guB = param_reac_B[:sc]*(-2*uB_eq*vB_eq)
 # gvB = param_reac_B[:sc]*(-uB_eq^2)
 # DvB_cr = ((sqrt(fuB*gvB - fvB*guB) + sqrt(-fvB*guB))/fuB)^2
+#********************************#
 
-# reac_B_name = "Linear Activator-Inhibitor"
-# param_reac_B = Dict(
-#     :act_synth => 3.0,
-#     :act_autocat => 8.0,
-#     :inhib_act =>  bB,
-#     :max_act_synth => 1000.0,
-#     :act_deg => 7.0,
-#     :inhib_synth => 0.75,
-#     :inhib_autocat => 0.5,
-#     :inhib_act_crea => 1.0,
-#     :max_inhib_synth => 1000.0,
-#     :inhib_deg => 1.5,
-#     :sc => 1.0,
-#     :c_eq => 0.25
-# )
+#********************************#
+reac_B_name = "Linear Activator-Inhibitor"
+param_reac_B = Dict(
+    :act_synth => 3.0,
+    :act_autocat => 8.0,
+    :inhib_act =>  2.0,
+    :max_act_synth => 10.0,
+    :act_deg => 7.0,
+    :inhib_synth => 0.75,
+    :inhib_autocat => 0.5,
+    :inhib_act_crea => 1.0,
+    :max_inhib_synth => 10.0,
+    :inhib_deg => 1.5,
+    :sc => 1.0,
+    :c_eq => 0.25
+)
 
 
-# DuB = 25.0
-# DvB = 35.0
-# Dc = 25.0
+DuB = 25.0
+DvB = 35.0
+Dc = 25.0
 # aB = param_reac_B[:act_autocat] - param_reac_B[:act_deg]
 # cB = param_reac_B[:inhib_deg] - param_reac_B[:inhib_autocat]
 # a2B = param_reac_B[:act_deg]
 # c2B = param_reac_B[:inhib_deg]
 # DvB_cr = ((sqrt(bB*dB - aB*cB) + sqrt(bB*dB))^2 / aB^2) * DuB
+#********************************#
 
 ## Chemotaxis
-χ = 0.0
-# χ = 120.0
+# χ = 0.0
+χ = 120.0
 
 ## Growth rate
 γ = 0.2   # Growth rate
@@ -285,11 +292,11 @@ println("Solving is done, now plotting...")
 
 plot_save_sol(
     sol,U_init,c_index,uB_index,vB_index,uS_index,vS_index,dx,dy;
-    range_uS=nothing,
-    range_vS=nothing,
-    range_uB=nothing,
-    range_vB=nothing,
-    range_c=(0,2),
+    range_uS=(0.498,0.506),
+    range_vS=(0.749,0.755),
+    range_uB=(0.4,0.9),
+    range_vB=(0.69,0.86),
+    range_c=(0.19,1.1),
     dir=simu_name,video_name=simu_name,
     dt=1.0)
 
