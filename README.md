@@ -2,7 +2,7 @@
 
 This repository contains the code for the preprint 
 
-Diez A., Krause A. L., Maini P. K., Gaffney E. A., Seirin-Lee S., *The effect of coupling on pattern formation in reaction-cross-diffusion systems with a bilayer geometry*, 2023 
+Diez A., Krause A. L., Maini P. K., Gaffney E. A., Seirin-Lee S., *The effect of coupling on Turing pattern formation in reaction-cross-diffusion systems with a bilayer geometry*, 2023 
 
 The goal of this article is to investigate the patterning conditions in general bilayer reaction-cross-diffusion systems either in a 1D-surface/2D-bulk situation or in the case of two coupled 1D layers. In these models, the different species are able to diffuse through an inteface via a linear transport law. Depending on the strength of the exchange rates between the two layers, different patterning scenarios are detailed in the article and confronted to numerical simulations which can be reproduced using the code provided in this repository. 
 
