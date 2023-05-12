@@ -13,7 +13,7 @@ include("models.jl")
 
 # 2. DEFINE THE (η,δ) Turing Space
 
-n_var = 5    # Number of variables
+n_var = 4    # Number of variables
 
 ################ THE SET OF MODES ###############################################
 
@@ -29,7 +29,7 @@ X_all = (pi/L * p_all).^2
 ### The Julia-symbols to access the variables in the dictionary of parameters ### 
 
 η_sb = :η
-δ_sb = :DvB
+δ_sb = :DvS
 
 #################################################################################
 
@@ -37,7 +37,7 @@ X_all = (pi/L * p_all).^2
 ################ THE SPATIAL DISCRETISATION OF THE (η,δ) Turing space ###########
 
 xs = LinRange(0.0,5.0,200)    # η-axis
-ys = LinRange(20.0,100.0,200)    # δ=axis
+ys = LinRange(14.0,20.0,200)    # δ=axis
 
 #################################################################################
 
@@ -121,9 +121,10 @@ tgt = lines!(ax,xs,δ_cr.+δ_p.*xs,color=:red)    # add to current plot
 
 # println("Compute the asymptotic critical values when η→+∞ ....")
 
-# equi = equilibria(reaction_BS,param;A=A,B=B,U0=rand(3))
-# X_BS_cr, δ_BS_cr = critical(reaction_BS,diffusion_BS,param,η_sb,δ_sb,equi;A=A,B=B,kwargs...)
-# hlines!(ax,[δ_BS_cr],color=:red)    # add to current plot
+U0 = rand(2)
+equi = equilibria(reaction_BS,param;A=A,B=B,U0=U0)
+X_BS_cr, δ_BS_cr = critical(reaction_BS,diffusion_BS,param,η_sb,δ_sb,equi;A=A,B=B,kwargs...)
+hlines!(ax,[δ_BS_cr],color=:red)    # add to current plot
 
 #===============================================================================#
 
